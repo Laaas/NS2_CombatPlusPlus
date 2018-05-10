@@ -72,7 +72,7 @@ function CombatPlusPlus_GetAverageXp(ignorePlayer)
         
         if player ~= ignorePlayer and (player:GetTeamNumber() == kTeam1Index or player:GetTeamNumber() == kTeam2Index) then
             
-            totalXp = totalXP + player:GetCombatXP()
+            totalXp = totalXp + player:GetCombatXP()
             numPlayers = numPlayers + 1
             
         end
