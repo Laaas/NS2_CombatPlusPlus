@@ -62,6 +62,31 @@ function CombatPlusPlus_GetRankByXP(xp)
 
 end
 
+function CombatPlusPlus_GetAverageXp(ignorePlayer)
+    
+    local averageXp = 0
+    local totalXp = 0
+    local numPlayers = 0
+    
+    for _, player in ientitylist(Shared.GetEntitiesWithClassname("Player")) do
+        
+        if player ~= ignorePlayer and (player:GetTeamNumber() == kTeam1Index or player:GetTeamNumber() == kTeam2Index) then
+            
+            totalXp = totalXP + player:GetCombatXP()
+            numPlayers = numPlayers + 1
+            
+        end
+        
+    end
+    
+    if totalXp > 0 and numPlayer > 0 then
+        averageXp = math.floor((totalXp / numPlayers) * kAverageXpModifier)
+    end
+    
+    return averageXp
+    
+end
+
 function CombatPlusPlus_GetIsScalableXPType(type)
 
     local scalableXPTypes =
