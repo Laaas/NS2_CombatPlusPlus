@@ -73,6 +73,17 @@ function CombatScoreMixin:AddXP(xp, source, targetId)
 
 end
 
+function CombatScoreMixin:BalanceXP()
+    
+    local averageXp = CombatPlusPlus_GetAverageXp(self)
+    local xpDiff = averageXp - self:GetCombatXP()
+    
+    if xpDiff > 0 then
+        self:AddXP(xpDiff, kXPSourceType.Balance, Entity.invalidId)
+    end
+    
+end    
+
 function CombatScoreMixin:GetCombatRank()
     return self.combatRank
 end
