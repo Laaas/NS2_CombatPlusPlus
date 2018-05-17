@@ -261,6 +261,44 @@ if Server then
     function NS2Gamerules:CheckForNoCommander(onTeam, commanderType)
 
     end
+    
+    function NS2Gamerules:UpdateCombatMode()
+
+        if self.nextTimeXpBalance == nil then
+            self.nextTimeXpBalance = kCombatXpBalanceInterval
+        end
+
+        -- calculate the current game time
+        local gameTime = math.floor(Shared.GetTime() - self.gameInfo:GetStartTime())
+
+        -- check to see if it's time to rebalance xp
+        if gameTime >= self.nextTimeXpBalance then
+            
+            local averageXp = CombatPlusPlus_GetAverageXp()
+            
+            -- balance xp
+            for i, player in ientitylist(Shared.GetEntitiesWithClassname("Player")) do
+                if player:GetIsPlaying() then
+                    player:BalanceXP(averageXp)
+                end
+            end
+            
+            self.nextTimeXpBalance = self.nextTimeXpBalance + kCombatXpBalanceInterval
+            
+        end
+        
+    end
+    
+    local ns2_NS2Gamerules_OnUpdate = NS2Gamerules.OnUpdate
+    function NS2Gamerules:OnUpdate(timePassed)
+        
+        ns2_NS2Gamerules_OnUpdate(self, timePassed)
+        
+        if self:GetGameStarted() then
+            self:UpdateCombatMode()
+        end
+        
+    end
 
     local ns2_NS2GameRules_JoinTeam = NS2Gamerules.JoinTeam
     function NS2Gamerules:JoinTeam(player, newTeamNumber, force)
